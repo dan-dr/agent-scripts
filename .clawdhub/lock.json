@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "research": {
+      "version": "1.0.1",
+      "installedAt": 1768467364208
+    },
+    "agent-browser": {
+      "version": "0.1.0",
+      "installedAt": 1768468071648
+    },
+    "perplexity": {
+      "version": "1.0.0",
+      "installedAt": 1768468073294
+    },
+    "app-store-changelog": {
+      "version": "1.0.1",
+      "installedAt": 1768468075411
+    },
+    "self-improving-agent": {
+      "version": "1.0.0",
+      "installedAt": 1768468077681
+    }
+  }
+}

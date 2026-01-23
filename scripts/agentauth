@@ -1,0 +1,153 @@
+#!/usr/bin/env nu
+
+def die [message: string] {
+  print $"agentauth: ($message)"
+  exit 1
+}
+
+def codex_dir [] {
+  $nu.home-path | path join ".codex"
+}
+
+def codex_auth_path [] {
+  codex_dir | path join "auth.json"
+}
+
+def codex_named_auth_path [name: string] {
+  codex_dir | path join $"auth.($name).json"
+}
+
+def ensure_codex_paths [] {
+  let dir = (codex_dir)
+  if not ($dir | path exists) {
+    die $"codex dir not found: ($dir)"
+  }
+
+  let auth = (codex_auth_path)
+  if not ($auth | path exists) {
+    die $"auth.json not found: ($auth)"
+  }
+}
+
+def read_auth [path: string] {
+  open $path
+}
+
+def write_auth [path: string, auth: record] {
+  $auth | to json -r | save -f $path
+}
+
+def validate_name [raw: string] {
+  let trimmed = ($raw | str trim)
+  if $trimmed == "" {
+    die "name required"
+  }
+  if ($trimmed | str contains "/") or ($trimmed | str contains "\\") {
+    die "name must not contain path separators"
+  }
+  if ($trimmed | str contains "..") {
+    die "name must not contain '..'"
+  }
+  $trimmed
+}
+
+def prompt_name [message: string] {
+  print $message
+  let raw = (input "> ")
+  validate_name $raw
+}
+
+def get_auth_name [auth: record] {
+  let name = ($auth | get -o name)
+  if $name == null {
+    return null
+  }
+  let trimmed = ($name | into string | str trim)
+  if $trimmed == "" {
+    return null
+  }
+  $trimmed
+}
+
+def ensure_auth_named [path: string, auth: record, message: string] {
+  let name = (get_auth_name $auth)
+  if $name != null {
+    return { name: $name, auth: $auth }
+  }
+  let new_name = (prompt_name $message)
+  let updated = ($auth | upsert name $new_name)
+  write_auth $path $updated
+  { name: $new_name, auth: $updated }
+}
+
+def ensure_target_named [path: string, auth: record, target: string] {
+  let name = (get_auth_name $auth)
+  if $name == $target {
+    return $auth
+  }
+  let updated = ($auth | upsert name $target)
+  write_auth $path $updated
+  $updated
+}
+
+def show_codex [] {
+  ensure_codex_paths
+  let auth_path = (codex_auth_path)
+  let auth = (read_auth $auth_path)
+  let name = (get_auth_name $auth)
+  if $name != null {
+    print $"current auth name: ($name)"
+    return
+  }
+  let result = (ensure_auth_named $auth_path $auth "no name for this auth, enter a name to add")
+  print $"saved name: ($result.name)"
+}
+
+def switch_codex [target: string] {
+  ensure_codex_paths
+
+  let auth_path = (codex_auth_path)
+  let auth = (read_auth $auth_path)
+  let current = (ensure_auth_named $auth_path $auth "current auth has no name, please name it before switching")
+  let current_name = $current.name
+  if $current_name == $target {
+    print $"already active: ($target)"
+    return
+  }
+
+  let target_path = (codex_named_auth_path $target)
+  if not ($target_path | path exists) {
+    die $"target auth not found: ($target_path)"
+  }
+
+  let target_auth = (read_auth $target_path)
+  let _ = (ensure_target_named $target_path $target_auth $target)
+
+  let current_save_path = (codex_named_auth_path $current_name)
+  mv -f $auth_path $current_save_path
+  mv -f $target_path $auth_path
+  print $"switched codex auth to ($target)"
+}
+
+def usage [] {
+  print "Usage: agentauth codex [name]"
+}
+
+def main [provider?: string, name?: string] {
+  if $provider == null {
+    usage
+    exit 2
+  }
+
+  if $provider != "codex" {
+    die $"unsupported provider: ($provider)"
+  }
+
+  if $name == null {
+    show_codex
+    return
+  }
+
+  let target = (validate_name $name)
+  switch_codex $target
+}

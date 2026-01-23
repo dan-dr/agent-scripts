@@ -1,7 +1,5 @@
 # Agent Scripts
 
-This folder collects the Sweetistics guardrail helpers so they are easy to reuse in other repos or share during onboarding. Everything here is copied verbatim from `/Users/steipete/Projects/sweetistics` on 2025-11-08 unless otherwise noted.
-
 Additional skills (copied 2025-12-31) are from @Dimillian’s public `Dimillian/Skills` repository:
 
 - `skills/swift-concurrency-expert`

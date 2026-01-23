@@ -7,24 +7,22 @@ Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 
 - Contact: Dan Rosenshain (@dan_ddyo, danrosenshain@gmail.com).
 - Workspace: `~/Projects`. Missing dan-dr repo: clone `https://github.com/dan-dr/<repo>.git`.
-- 3rd-party/OSS (non-ddyo): clone under `~/Projects/oss`.
-- `~/Projects/manager`: private ops (domains/DNS, redirects/workers, runbooks).
-- “MacBook” / “Mac Studio” => SSH there; find hosts/IPs via `tailscale status`.
+- 3rd-party/OSS (non-dan-dr): clone under `~/Projects/oss`.
 - Files: repo or `~/Projects/agent-scripts`.
 - PRs: use `gh pr view/diff` (no URLs).
 - “Make a note” => edit AGENTS.md (shortcut; not a blocker). Ignore `CLAUDE.md`.
 - No `./runner`. Guardrails: use `trash` for deletes.
 - Need upstream file: stage in `/tmp/`, then cherry-pick; never overwrite tracked.
 - Bugs: add regression test when it fits.
-- Keep files <~500 LOC; split/refactor as needed.
+- Keep files <~750 LOC; split/refactor as needed.
 - Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`).
 - Subagents: read `docs/subagent.md`.
-- Editor: `code <path>`.
+- Editor: `cursor <path>`.
 - CI: `gh run list/view` (rerun/fix til green).
 - Prefer end-to-end verify; if blocked, say what’s missing.
 - New deps: quick health check (recent releases/commits, adoption).
 - Slash cmds: `~/.codex/prompts/`.
-- Web: search early; quote exact errors; prefer 2024–2025 sources; fallback Firecrawl (`pnpm mcp:*`) / `mcporter`.
+- Web: search early; quote exact errors; prefer 2024–2026 sources; fallback Firecrawl (`pnpm mcp:*`) / `mcporter`.
 - Oracle: run `npx -y @steipete/oracle --help` once/session before first use.
 - Style: telegraph. Drop filler/grammar. Min tokens (global AGENTS + replies).
 - Toolchains: default to `mise` installs (prepend `~/.local/share/mise/installs/<tool>/<version>/bin` to PATH); avoid Homebrew toolchains unless asked.
@@ -38,14 +36,7 @@ Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 - Replace asset; keep dimensions; commit; run gate; verify CI.
 
 ## Important Locations
-
-<!-- - Blog repo: `~/Projects/steipete.me` -->
-
-<!-- - Notes/Runbooks: `~/Projects/manager/docs/` (e.g. `mac-studio.md`, `mac-vm.md`) -->
-
-- OpenAI/Codex limits tracking: `~/Documents/dan/codex limits.md`
 - Noteplan notes: `$HOME/Library/Containers/co.noteplan.NotePlan-setapp/Data/Library/Application Support/co.noteplan.NotePlan-setapp/Notes`
-<!-- - Sparkle keys: `~/Library/CloudStorage/Dropbox/Backup/Sparkle` -->
 
 ## Docs
 
@@ -74,7 +65,7 @@ Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 - CI red: `gh run list/view`, rerun, fix, push, repeat til green.
 - Keep it observable (logs, panes, tails, MCP/browser tools).
 - Release: read `docs/RELEASING.md` (or find best checklist if missing).
-- Reminder: check `~/.profile` for missing env keys (e.g. `SPARKLE_PRIVATE_KEY_FILE`); Sparkle keys live in `~/Library/CloudStorage/Dropbox/Backup/Sparkle`.
+- Reminder: check `~/.profile` for missing env keys
 
 ## Git
 
@@ -84,6 +75,7 @@ Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 - Destructive ops forbidden unless explicit (`reset --hard`, `clean`, `restore`, `rm`, …).
 - Remotes under `~/Projects`: prefer HTTPS; flip SSH->HTTPS before pull/push.
 - Commit helper on PATH: `committer` (bash). Prefer it; if repo has `./scripts/committer`, use that.
+- Commit message should be the prompts that were given for the change, summarized if too long
 - Don’t delete/rename unexpected stuff; stop + ask.
 - No repo-wide S/R scripts; keep edits small/reviewable.
 - Avoid manual `git stash`; if Git auto-stashes during pull/rebase, that’s fine (hint, not hard guardrail).
@@ -95,7 +87,7 @@ Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 ## Language/Stack Notes
 
 - Swift: use workspace helper/daemon; validate `swift build` + tests; keep concurrency attrs right.
-- TypeScript: use repo PM; run `docs:list`; keep files small; follow existing patterns.
+- TypeScript: use repo PM; run `docs:list`; keep files small; follow existing patterns. NEVER, EVER use any type. Using as is bad, use the types given everywhere and model the real shapes. If the app is for a browser, assume we use all modern browsers unless otherwise specified, we don't need most polyfills.
 
 ## macOS Permissions / Signing (TCC)
 
@@ -109,9 +101,15 @@ Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 - Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
 - Leave breadcrumb notes in thread.
 
-## Tools
 
 Read `~/Projects/agent-scripts/tools.md` for the full tool catalog if it exists.
+
+## AWS
+- NEVER run any aws command on prod profile without explicit approval from the user.
+
+
+## Tools
+
 
 ### bird
 
