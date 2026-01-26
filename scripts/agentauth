@@ -129,11 +129,23 @@ def switch_codex [target: string] {
   print $"switched codex auth to ($target)"
 }
 
-def usage [] {
-  print "Usage: agentauth codex [name]"
+def stash_codex [] {
+  ensure_codex_paths
+
+  let auth_path = (codex_auth_path)
+  let auth = (read_auth $auth_path)
+  let current = (ensure_auth_named $auth_path $auth "current auth has no name, please name it before switching")
+  let current_name = $current.name
+  let current_save_path = (codex_named_auth_path $current_name)
+  mv -f $auth_path $current_save_path
+  print $"moved current auth to ($current_save_path)"
 }
 
-def main [provider?: string, name?: string] {
+def usage [] {
+  print "Usage: agentauth codex [name] [--none]"
+}
+
+def main [provider?: string, name?: string, --none] {
   if $provider == null {
     usage
     exit 2
@@ -141,6 +153,14 @@ def main [provider?: string, name?: string] {
 
   if $provider != "codex" {
     die $"unsupported provider: ($provider)"
+  }
+
+  if $none {
+    if $name != null {
+      die "do not pass a name with --none"
+    }
+    stash_codex
+    return
   }
 
   if $name == null {
