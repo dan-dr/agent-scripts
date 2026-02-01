@@ -77,12 +77,12 @@ If user says yes, start a coding run (use the coding agent workflow available in
 
 ---
 
-## Reference: will.aire.place redesign (2026-01-31)
+## Reference: redesign (2026-01-31)
 
 First successful use of this skill. Documents the full input→output pipeline.
 
 ### Input received
-- **Repo**: `/home/ubuntu/projects/aire.place/apps/web` (React 19 + TanStack Router + TanStack Start + Vite 7 + Cloudflare Workers + Tailwind CSS v4 + shadcn)
+- **Repo**: `/apps/web` (React 19 + TanStack Router + TanStack Start + Vite 7 + Cloudflare Workers + Tailwind CSS v4 + shadcn)
 - **Design prompt**: Raw SuperDesign "AI System Configuration Console" prompt — industrial dark theme, 65/35 split with sidebar, acid green (#d4ff00), 0px radius, grid overlays, scanlines, corner ticks
 - **Constraints from user**: "layout should NOT change too much", "no sidebar"
 
