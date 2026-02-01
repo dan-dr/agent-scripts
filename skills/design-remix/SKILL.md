@@ -119,7 +119,3 @@ Passed to Codex CLI (`codex --full-auto exec`) running in the `apps/web` directo
 - Rewrote all 9 component/route files (1,055 lines total)
 - Added ~210 lines of `.console-*` CSS
 - Completed in ~25 minutes
-
-### Post-handoff fixes needed
-1. **JSX escape**: Codex left an unescaped `}` in a JSX string literal (`"}"` → `{"\"}"}`). Caught by vite build, fixed manually.
-2. **Missing CF secrets**: Wrangler deploy needed `CLOUDFLARE_API_TOKEN` (not a design-remix issue, infra gap).
