@@ -1,0 +1,3 @@
+interface:
+  display_name: "Preview Signature Import"
+  short_description: "Import PNG signatures into macOS Preview"

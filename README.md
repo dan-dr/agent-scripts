@@ -1,5 +1,9 @@
 # Agent Scripts
 
+## Skills
+
+- [Preview Signature Import](skills/preview-signature-import/SKILL.md): import a handwritten signature or initials PNG into macOS Preview through Keychain Access with SIP enabled. Includes a local preparation helper that never accesses Keychain.
+
 Additional skills (copied 2025-12-31) are from @Dimillian’s public `Dimillian/Skills` repository:
 
 - `skills/swift-concurrency-expert`
